@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Smart Irrigation</title>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* General styling */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('https://img.freepik.com/free-photo/sunny-meadow-landscape_1112-134.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Overlay for better readability */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3); /* Subtle dark overlay */
+            z-index: 1;
+        }
+
+        /* Ensure content is above overlay */
+        header, .icon-section, .tagline, main, footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header styling */
+        header {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        /* Icon section styling */
+        .icon-section {
+            padding: 30px 0;
+        }
+
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .icon-card {
+            text-decoration: none;
+            color: #333;
+            background: rgba(255, 255, 255, 0.85); /* Semi-transparent white for contrast */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(230, 243, 250, 0.9); /* Light blue on hover */
+        }
+
+        .icon-card i {
+            font-size: 4em;
+            color: #2ecc71; /* Green to match meadow tones */
+            margin-bottom: 15px;
+        }
+
+        .icon-card p {
+            margin: 0;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        /* Tagline section */
+        .tagline {
+            margin: 30px auto;
+            max-width: 700px;
+            font-size: 1.2em;
+            color: #fff;
+            background: rgba(44, 62, 80, 0.7); /* Dark semi-transparent background */
+            padding: 10px 20px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        /* Main content (empty for now, can be expanded) */
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            padding: 15px;
+            background: rgba(44, 62, 80, 0.9); /* Dark semi-transparent */
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .icon-container {
+                flex-direction: column;
+                gap: 25px;
+                align-items: center;
+            }
+
+            .icon-card {
+                width: 85%;
+            }
+
+            .icon-card i {
+                font-size: 3.5em;
+            }
+
+            .icon-card p {
+                font-size: 1.2em;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+
+            .tagline {
+                font-size: 1em;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with title -->
+    <header>
+        <h1>Smart Irrigation Solutions</h1>
+    </header>
+
+    <!-- Icon section at the top -->
+    <section class="icon-section">
+        <div class="icon-container">
+            <!-- Icon for Precision Irrigation Simulator -->
+            <a href="main1.html" class="icon-card">
+                <i class="fas fa-tractor"></i>
+                <p>Precision Irrigation Simulator</p>
+            </a>
+            <!-- Icon for Smart Paddy Irrigation AI -->
+            <a href="Indicator.html" class="icon-card">
+                <i class="fas fa-seedling"></i>
+                <p>Smart Paddy Irrigation AI</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Tagline section -->
+    <div class="tagline">
+        Optimize your farming with cutting-edge irrigation simulations and AI-driven analysis.
+    </div>
+
+    <!-- Main content (empty for now, can be expanded) -->
+    <main></main>
+
+    <!-- Footer with copyright -->
+    <footer>
+        <p>© 2025 Smart Irrigation Solutions</p>
+    </footer>
+</body>
+</html>

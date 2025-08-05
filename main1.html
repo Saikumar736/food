@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Precision Irrigation Simulator</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* Background and overlay styling */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://t3.ftcdn.net/jpg/08/04/22/42/360_F_804224219_QdNW7DlskOWvDzon8xM4LQuxX62bdvdm.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    /* Ensure content is above overlay */
+    header, main, section, div {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Header styling */
+    header {
+      background: rgba(44, 62, 80, 0.9);
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    /* Button/icon enhancements */
+    button {
+      padding: 15px 25px;
+      margin: 5px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #27ae60, #3498db);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #219653, #2980b9);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Specific icon assignments */
+    #modeToggle button:nth-child(1):before { content: "\f044"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #modeToggle button:nth-child(2):before { content: "\f0e7"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #modeToggle button:nth-child(3):before { content: "\f0c2"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+    .controls button:nth-child(1):before { content: "\f04b"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    .controls button:nth-child(2):before { content: "\f04d"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    .controls button:nth-child(3):before { content: "\f051"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    .controls button:nth-child(4):before { content: "\f0e2"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+    #controls button:nth-child(4):before { content: "\f04b"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #controls button:nth-child(5):before { content: "\f04d"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #controls button:nth-child(6):before { content: "\f051"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+    #controls button:nth-child(7):before { content: "\f0e2"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+    button#downloadData:before { content: "\f0c7"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+    /* General section styling */
+    section, .simView {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      margin: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Status message styling */
+    #status {
+      color: #e74c3c;
+      margin: 10px;
+      font-weight: bold;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      button {
+        font-size: 1em;
+        padding: 10px 15px;
+        gap: 5px;
+      }
+
+      header h1 {
+        font-size: 2em;
+      }
+
+      .simView, #controls {
+        margin: 5px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Precision Irrigation Simulator</h1>
+  </header>
+
+  <main>
+    <section id="modeToggle">
+      <button onclick="showMode('ai')">View AI Simulation</button>
+      <button onclick="showMode('traditional')">View Traditional Simulation</button>
+      <button onclick="showMode('both')">Compare Side by Side</button>
+    </section>
+
+    <div id="simulations">
+      <!-- AI Simulation -->
+      <div id="aiSim" class="simView">
+        <h2>AI Simulation</h2>
+        <div class="controls">
+          <button onclick="startSimulation('ai')">Start</button>
+          <button onclick="stopSimulation('ai')">Stop</button>
+          <button onclick="stepSimulation('ai')">Step</button>
+          <button onclick="resetSimulation('ai')">Reset</button>
+          <label>Forecast: <input type="checkbox" id="forecastToggle-ai" checked onchange="fetchPrediction('ai')"></label>
+        </div>
+        <div id="field-ai" class="field"></div>
+        <div class="dashboard">
+          Water Used: <span id="waterUsed-ai">0</span> L<br>
+          Health Index: <span id="healthIndex-ai">0</span>%<br>
+          Predicted Water Need: <span id="predictedWater-ai">N/A</span> L<br>
+          Predicted Health: <span id="predictedHealth-ai">N/A</span>%
+        </div>
+        <ul id="logList-ai" class="logList"></ul>
+      </div>
+
+      <!-- Traditional Simulation -->
+      <div id="traditionalSim" class="simView">
+        <h2>Traditional Simulation</h2>
+        <div class="controls">
+          <button onclick="startSimulation('traditional')">Start</button>
+          <button onclick="stopSimulation('traditional')">Stop</button>
+          <button onclick="stepSimulation('traditional')">Step</button>
+          <button onclick="resetSimulation('traditional')">Reset</button>
+          <label>Forecast: <input type="checkbox" id="forecastToggle-traditional" checked onchange="fetchPrediction('traditional')"></label>
+        </div>
+        <div id="field-traditional" class="field"></div>
+        <div class="dashboard">
+          Water Used: <span id="waterUsed-traditional">0</span> L<br>
+          Health Index: <span id="healthIndex-traditional">0</span>%<br>
+          Predicted Water Need: <span id="predictedWater-traditional">N/A</span> L<br>
+          Predicted Health: <span id="predictedHealth-traditional">N/A</span>%
+        </div>
+        <ul id="logList-traditional" class="logList"></ul>
+      </div>
+    </div>
+
+    <!-- Data Export & Unified Simulation Controls -->
+    <section id="controls">
+      <label>Export Mode:
+        <select id="modeSelector">
+          <option value="ai">AI Mode</option>
+          <option value="traditional">Traditional Mode</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="forecastToggle" checked> Use Rain Forecast</label>
+      <button id="downloadData" onclick="downloadData()">Save Simulation</button>
+      <select id="exportFormat">
+        <option value="json">Export as JSON</option>
+        <option value="csv">Export as CSV</option>
+      </select>
+      <button onclick="startSimulation()">Start</button>
+      <button onclick="stopSimulation()">Stop</button>
+      <button onclick="stepSimulation()">Step</button>
+      <button onclick="resetSimulation()">Reset</button>
+      <span id="weatherDisplay">Weather: -</span>
+    </section>
+
+    <!-- Legacy Single Grid Display -->
+    <section id="field" class="field"></section>
+    <section id="dashboard">
+      <div id="logs">
+        <h3>Irrigation Log</h3>
+        <ul id="logList"></ul>
+      </div>
+      <p>Total Water Used: <span id="waterUsed">0</span> L</p>
+      <p>Crop Health Index: <span id="healthIndex">0</span>%</p>
+    </section>
+
+    <!-- Health Chart -->
+    <canvas id="healthChart" width="600" height="200"></canvas>
+
+    <!-- Status Message -->
+    <div id="status"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Mock API response function
+    function mockPrediction(waterUsed, healthIndex, mode) {
+      // Simulate prediction based on input data
+      const predictedWater = waterUsed + Math.floor(Math.random() * 500); // Random increase
+      const predictedHealth = Math.min(healthIndex + Math.floor(Math.random() * 20), 100); // Random increase up to 100%
+      return { predictedWater, predictedHealth };
+    }
+
+    // Fetch prediction function
+    async function fetchPrediction(mode) {
+      const status = document.getElementById('status');
+      const forecastToggle = document.getElementById(`forecastToggle-${mode}`).checked;
+      if (forecastToggle) {
+        try {
+          const waterUsed = parseInt(document.getElementById(`waterUsed-${mode}`).textContent);
+          const healthIndex = parseInt(document.getElementById(`healthIndex-${mode}`).textContent);
+
+          if (isNaN(waterUsed) || isNaN(healthIndex)) {
+            status.textContent = 'Error: Invalid data for prediction.';
+            return;
+          }
+
+          // Simulate API call with mock data
+          const data = mockPrediction(waterUsed, healthIndex, mode);
+          document.getElementById(`predictedWater-${mode}`).textContent = data.predictedWater || 'N/A';
+          document.getElementById(`predictedHealth-${mode}`).textContent = data.predictedHealth || 'N/A';
+          status.textContent = 'Prediction updated successfully!';
+          status.style.color = '#2ecc71'; // Green for success
+        } catch (error) {
+          console.error('Error fetching prediction:', error);
+          status.textContent = 'Error fetching prediction. Check console for details.';
+          status.style.color = '#e74c3c'; // Red for error
+        }
+      } else {
+        document.getElementById(`predictedWater-${mode}`).textContent = 'N/A';
+        document.getElementById(`predictedHealth-${mode}`).textContent = 'N/A';
+        status.textContent = 'Forecast disabled.';
+        status.style.color = '#3498db'; // Blue for info
+      }
+    }
+
+    // Simulate initial data and trigger prediction
+    document.addEventListener('DOMContentLoaded', () => {
+      ['ai', 'traditional'].forEach(mode => {
+        document.getElementById(`waterUsed-${mode}`).textContent = Math.floor(Math.random() * 1000);
+        document.getElementById(`healthIndex-${mode}`).textContent = Math.floor(Math.random() * 100);
+        fetchPrediction(mode);
+      });
+    });
+  </script>
+</body>
+</html>
